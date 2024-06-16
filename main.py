@@ -937,12 +937,18 @@ if info_type == 'Team Stat Analysis':
                 if set(tactical_features) == set(team_tactical_features):
                     similar_tactical_teams.append((team, team_stats))
 
+            # 기존의 전술상 유리한 팀과 불리한 팀을 선택한 후에 중복을 제거하는 과정 추가
             advantage_teams = sorted(similar_tactical_teams, key=lambda x: sum(
                 rankings[stat][teams.tolist().index(x[0])] for stat in stats.keys()))[:3]
 
             disadvantage_teams = sorted(similar_tactical_teams, key=lambda x: sum(
                 rankings[stat][teams.tolist().index(x[0])] for stat in stats.keys()), reverse=True)[:3]
 
+            # 중복 제거
+            advantage_team_names = [team[0] for team in advantage_teams]
+            disadvantage_teams = [team for team in disadvantage_teams if team[0] not in advantage_team_names]
+
+            # 부족한 팀을 채우는 로직 수정
             if len(advantage_teams) < 3:
                 remaining_teams = [team for team in team_stats_dict.keys() if
                                    team not in [x[0] for x in similar_tactical_teams] and team != team_name]
@@ -952,9 +958,11 @@ if info_type == 'Team Stat Analysis':
 
             if len(disadvantage_teams) < 3:
                 remaining_teams = [team for team in team_stats_dict.keys() if
-                                   team not in [x[0] for x in similar_tactical_teams] and team != team_name and team not in [t[0] for t in advantage_teams]]
+                                   team not in [x[0] for x in
+                                                similar_tactical_teams] and team != team_name and team not in advantage_team_names]
                 remaining_teams = sorted(remaining_teams, key=lambda team: sum(team_stats_dict[team].values()),
-                                         reverse=True)[:(3 - len(disadvantage_teams))]
+                                         reverse=True)[
+                                  :(3 - len(disadvantage_teams))]
                 disadvantage_teams.extend([(team, team_stats_dict[team]) for team in remaining_teams])
 
             st.subheader('Team Average Stats')

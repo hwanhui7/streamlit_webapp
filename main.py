@@ -701,7 +701,7 @@ elif info_type == 'All Stat Analysis':
         st.sidebar.write('')
 
     with tab7:
-        st.subheader("홈 팀과 원정 팀의 파울 수에 따른 옐로 카드 + 레드 카드 수")
+        st.subheader("홈 팀과 원정 팀의 파울 수에 따른 총 카드 수")
 
         data['home_team_total_cards'] = data['home_team_yellow_cards'] + data['home_team_red_cards']
         data['away_team_total_cards'] = data['away_team_yellow_cards'] + data['away_team_red_cards']
@@ -751,10 +751,10 @@ elif info_type == 'All Stat Analysis':
 
         st.markdown("""
                     <div style="font-size: 13px; line-height: 1.8;">
-                        홈 팀의 그래프에서는 파울 수가 증가할수록 옐로 카드와 레드 카드 수가 증가하는 경향이 있다. 홈 팀이 경기에서 파울을 
+                        홈 팀의 그래프에서는 파울 수가 증가할수록 총 카드 수가 증가하는 경향이 있다. 홈 팀이 경기에서 파울을 
                         많이 할수록 더 많은 카드를 받을 가능성이 크며, 이는 경기에서의 거친 플레이가 더 많은 제재로 이어질 수 있음을 
                         나타낸다. 상관 계수는 0.346으로 중간 정도의 양의 상관 관계가 있다.<br>                        
-                        원정 팀의 경우 파울 수가 증가할수록 옐로 카드와 레드 카드 수가 증가하지만, 홈 팀에 비해 기울기가 0.122로 약간 낮다. 
+                        원정 팀의 경우 파울 수가 증가할수록 총 카드 수가 증가하지만, 홈 팀에 비해 기울기가 0.122로 약간 낮다. 
                         이는 원정 팀이 파울을 많이 하더라도 카드를 받을 가능성이 홈 팀보다 약간 낮을 수 있음을 의미한다. 상관 계수는 
                         0.338로, 홈 팀과 비슷한 정도의 양의 상관 관계를 나타낸다.<br>                        
                         결론적으로 홈 팀은 파울 수가 많아질수록 더 많은 카드를 받을 가능성이 있으며, 경기에서의 거친 플레이가 더 많은 제재로 
@@ -992,16 +992,35 @@ elif info_type == 'Team Stat Analysis':
 
             st.write(' ')
 
-            st.subheader("전술적으로 유리한 팀")
+
+            def handle_click():
+                st.write("이미지가 클릭되었습니다!")
+
+
+            st.subheader("전술상 유리한 팀")
             for team, _ in advantage_teams:
-                st.markdown(f"""
-                            <p style="font-size: 20px; line-height: 1.1;">{team}</p>
-                        """, unsafe_allow_html=True)
+                col11, col22 = st.columns([1, 7])
+
+                with col11:
+                    image_path = f'{team}.png'
+                    st.image(image_path, width=22)
+
+                with col22:
+                    st.markdown(f"""
+                                <p style="font-size: 20px; line-height: 1.1;">{team}</p>
+                            """, unsafe_allow_html=True)
 
             st.write(' ')
 
-            st.subheader("전술적으로 불리한 팀")
+            st.subheader("전술상 불리한 팀")
             for team, _ in disadvantage_teams:
-                st.markdown(f"""
-                            <p style="font-size: 20px; line-height: 1.1;">{team}</p>
-                        """, unsafe_allow_html=True)
+                col11, col22 = st.columns([1, 7])
+
+                with col11:
+                    image_path = f'{team}.png'
+                    st.image(image_path, width=22)
+
+                with col22:
+                    st.markdown(f"""
+                                <p style="font-size: 20px; line-height: 1.1;">{team}</p>
+                            """, unsafe_allow_html=True)
